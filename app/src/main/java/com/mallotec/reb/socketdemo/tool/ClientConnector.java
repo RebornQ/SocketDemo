@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ClientConnector {
 
@@ -42,7 +43,7 @@ public class ClientConnector {
         byte[] buffer = new byte[1024];
         int len = -1;
         while ((len = inputStream.read(buffer)) != -1) {
-            String data = new String(buffer, 0, len);
+            String data = new String(buffer, 0, len, StandardCharsets.UTF_8);
 
             //通过回调接口将获取到的数据推送出去
             if (mListener != null) {
@@ -63,7 +64,7 @@ public class ClientConnector {
             //将客户端账号发送给服务端，让服务端保存
             OutputStream outputStream = mClient.getOutputStream();
             //模拟认证格式，以#开头
-            outputStream.write(("#" + authName).getBytes());
+            outputStream.write(("#" + authName).getBytes(StandardCharsets.UTF_8));
         }
     }
 
@@ -75,7 +76,7 @@ public class ClientConnector {
     public void send(String data) throws IOException {
         OutputStream outputStream = mClient.getOutputStream();
         //模拟内容格式：content
-        outputStream.write((data).getBytes());
+        outputStream.write((data).getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -87,7 +88,7 @@ public class ClientConnector {
     public void send(String receiver, String data) throws IOException {
         OutputStream outputStream = mClient.getOutputStream();
         //模拟内容格式：receiver+  # + content
-        outputStream.write((receiver + "#" + data).getBytes());
+        outputStream.write((receiver + "#" + data).getBytes(StandardCharsets.UTF_8));
     }
 
     /**
